@@ -21,7 +21,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSliderModule} from "@angular/material/slider";
-
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +29,7 @@ import {MatSliderModule} from "@angular/material/slider";
     CoffeeComponent
   ],
   imports: [
+    ReactiveFormsModule,
     AppRoutingModule,
     FormsModule, HttpClientModule,
     BrowserModule, BrowserAnimationsModule,
