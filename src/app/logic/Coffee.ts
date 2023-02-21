@@ -4,12 +4,15 @@ import {PlaceLocation} from "./PlaceLocation";
 export class Coffee {
 
   // Properties
-  type: string = ""
-  rating: number = 0
-  notes: string = ""
-  tastingRating: TastingRating | null = null
+  type = ""
+  rating = 0
+  notes = ""
 
-  constructor(public name: string = "", public place: string = "", public location: PlaceLocation = new PlaceLocation()) {
+
+  constructor(public name: string = "",
+              public place: string = "",
+              public location: PlaceLocation = new PlaceLocation(),
+              public tastingRating: TastingRating = new TastingRating()) {
 
   }
 

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
-import { Coffee } from "../logic/Coffee";
-import { GeolocationService } from "../geolocation.service";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
+import {Coffee} from "../logic/Coffee";
+import {GeolocationService} from "../geolocation.service";
+import {TastingRating} from "../logic/TastingRating";
 
 @Component({
   selector: 'app-coffee',
@@ -10,20 +11,29 @@ import { GeolocationService } from "../geolocation.service";
 })
 export class CoffeeComponent implements OnInit {
 
-  coffee! : Coffee;
+  coffee!: Coffee;
   types = ["Espresso", "Ristretto", "Americano", "Cappuccino", "Frappe"];
+  routingSubscription: any;
 
   constructor(private route: ActivatedRoute,
-              private geolocation: GeolocationService) { }
+              private geolocation: GeolocationService) {
+  }
 
-  routingSubscription: any;
+  tastingRatingChanged(checked: boolean) {
+    // if (checked) {
+    //   this.coffee.tastingRating = new TastingRating();
+    // } else {
+    //   this.coffee.tastingRating = undefined;
+    // }
+    this.coffee.tastingRating = new TastingRating();
+  }
 
   ngOnInit() {
     this.coffee = new Coffee();
     this.routingSubscription =
-        this.route.params.subscribe(params => {
-            console.log(params["id"]);
-        });
+      this.route.params.subscribe(params => {
+        console.log(params["id"]);
+      });
 
     this.geolocation.requestLocation((location: typeof this.coffee.location) => {
       if (location) {
@@ -38,4 +48,11 @@ export class CoffeeComponent implements OnInit {
     this.routingSubscription.unsubscribe();
   }
 
+  save() {
+    console.log('Save')
+  }
+
+  cancel() {
+    console.log('cancel');
+  }
 }

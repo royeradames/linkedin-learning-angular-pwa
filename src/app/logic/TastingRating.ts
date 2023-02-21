@@ -1,4 +1,4 @@
 export class TastingRating {
-  constructor(public aroma: number, public body: number, public flavor: number, public intensity: number, public sweetness: number, public aftertaste: number) {
+  constructor(public aroma = 1, public body = 1, public flavor = 1, public intensity = 1, public sweetness = 1, public aftertaste = 1) {
   }
 }
