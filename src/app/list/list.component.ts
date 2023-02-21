@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from "../data.service";
 import { Coffee } from "../logic/Coffee";
+import { Router } from "@angular/router";
+import { GeolocationService } from "../geolocation.service";
 
 @Component({
   selector: 'app-list',
@@ -11,10 +13,37 @@ export class ListComponent implements OnInit {
 
   list!: [Coffee]
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService,
+              private router: Router,
+              private geolocation: GeolocationService) { }
+
+  goDetails(coffee: Coffee) {
+    this.router.navigate(["/coffee", coffee._id]);
+  }
+
+  goMap(coffee: Coffee) {
+    if(!coffee.location) return
+    const mapURL = this.geolocation.getMapLink(coffee.location);
+    location.href = mapURL;
+  }
+
+  share(coffee: Coffee) {
+    const shareText = `I had this coffee at ${coffee.place} and for me it's a ${coffee.rating} star coffee`;
+    if ('share' in navigator) {
+      (navigator as any).share({
+        title: coffee.name,
+        text: shareText,
+        url: window.location.href
+      }).then( () => console.log("shared")).catch( () => console.log("error sharing"));
+    } else {
+      const shareURL = `whatsapp://send?text=${encodeURIComponent(shareText)}`;
+      location.href = shareURL;
+    }
+  }
 
   ngOnInit() {
-    this.data.getList((list: [Coffee]) => {
+    console.log("init");
+    this.data.getList((list: any) => {
       this.list = list;
     })
   }

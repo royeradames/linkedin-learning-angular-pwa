@@ -1,19 +1,21 @@
-import {TastingRating} from "./TastingRating";
-import {PlaceLocation} from "./PlaceLocation";
+import { TastingRating } from "./TastingRating";
+import { PlaceLocation } from "./PlaceLocation";
 
 export class Coffee {
 
-  // Properties
-  type = ""
-  rating = 0
-  notes = ""
+    // Properties
+    _id!: string;
+    type!: string;
+    rating!: number;
+    notes!: string;
+    tastingRating: TastingRating | null;
 
+    constructor(public name: string = "",
+                public place: string = "",
+                public location: PlaceLocation | null = null) {
 
-  constructor(public name: string = "",
-              public place: string = "",
-              public location: PlaceLocation = new PlaceLocation(),
-              public tastingRating: TastingRating = new TastingRating()) {
-
-  }
+        this.location = new PlaceLocation();
+        this.tastingRating = new TastingRating();
+    }
 
 }
