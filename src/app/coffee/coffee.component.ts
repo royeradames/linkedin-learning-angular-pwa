@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {Coffee} from "../logic/Coffee";
-import {GeolocationService} from "../geolocation.service";
-import {TastingRating} from "../logic/TastingRating";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
+import { Coffee } from "../logic/Coffee";
+import { GeolocationService } from "../geolocation.service";
+import { TastingRating } from "../logic/TastingRating";
+import { DataService } from "../data.service";
 
 @Component({
   selector: 'app-coffee',
@@ -11,35 +12,58 @@ import {TastingRating} from "../logic/TastingRating";
 })
 export class CoffeeComponent implements OnInit {
 
-  coffee!: Coffee;
+  coffee! : Coffee;
+  tastingEnabled : boolean = false;
   types = ["Espresso", "Ristretto", "Americano", "Cappuccino", "Frappe"];
-  routingSubscription: any;
 
   constructor(private route: ActivatedRoute,
-              private geolocation: GeolocationService) {
-  }
+              private geolocation: GeolocationService,
+              private router: Router,
+              private data: DataService
+            ) { }
+
+  routingSubscription: any;
 
   tastingRatingChanged(checked: boolean) {
-    // if (checked) {
-    //   this.coffee.tastingRating = new TastingRating();
-    // } else {
-    //   this.coffee.tastingRating = undefined;
-    // }
-    this.coffee.tastingRating = new TastingRating();
+    if (checked) {
+      this.coffee.tastingRating = new TastingRating();
+    } else {
+      this.coffee.tastingRating = null;
+    }
+  }
+
+  cancel() {
+    this.router.navigate(["/"]);
+  }
+
+  save() {
+    this.data.save(this.coffee, (result: any) => {
+      if (result) {
+        this.router.navigate(["/"]);
+      }
+    });
   }
 
   ngOnInit() {
     this.coffee = new Coffee();
     this.routingSubscription =
-      this.route.params.subscribe(params => {
-        console.log(params["id"]);
-      });
+        this.route.params.subscribe(params => {
+            console.log(params["id"]);
+            if (params["id"]) {
+              this.data.get(params["id"], (response: any) => {
+                this.coffee = response;
+                if (this.coffee.tastingRating) {
+                  this.tastingEnabled = true;
+                }
+              });
+            }
+        });
 
-    this.geolocation.requestLocation((location: typeof this.coffee.location) => {
-      if (location) {
-        this.coffee.location.latitude = location.latitude;
-        this.coffee.location.longitude = location.longitude;
-      }
+    this.geolocation.requestLocation((location: any) => {
+      if (!location) return
+      if(!this.coffee.location || !this.coffee.location)  return
+      this.coffee.location.latitude = location.latitude;
+      this.coffee.location.longitude = location.longitude;
     })
 
   }
@@ -48,11 +72,4 @@ export class CoffeeComponent implements OnInit {
     this.routingSubscription.unsubscribe();
   }
 
-  save() {
-    console.log('Save')
-  }
-
-  cancel() {
-    console.log('cancel');
-  }
 }
