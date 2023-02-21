@@ -1,19 +1,16 @@
-import { TastingRating } from "./TastingRating";
-import { PlaceLocation } from "./PlaceLocation";
+import {TastingRating} from "./TastingRating";
+import {PlaceLocation} from "./PlaceLocation";
 
 export class Coffee {
 
-    // Properties
-    type: string;
-    rating: number;
-    notes: string;
-    tastingRating: TastingRating;
+  // Properties
+  type: string = ""
+  rating: number = 0
+  notes: string = ""
+  tastingRating: TastingRating | null = null
 
-    constructor(public name: string = "", 
-                public place: string = "", 
-                public location: PlaceLocation = null) {
+  constructor(public name: string = "", public place: string = "", public location: PlaceLocation = new PlaceLocation()) {
 
-        this.location = new PlaceLocation();
-    }
+  }
 
 }

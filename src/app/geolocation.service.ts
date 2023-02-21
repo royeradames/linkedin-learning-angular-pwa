@@ -6,7 +6,7 @@ export class GeolocationService {
 
   constructor() { }
 
-  requestLocation(callback) {
+  requestLocation(callback: any) {
     // W3C Geolocation API
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -28,7 +28,7 @@ export class GeolocationService {
     if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
       return `https://maps.apple.com/?q=${query}`;
     } else {
-      return `https://maps.google.com/?q=${query}`;      
+      return `https://maps.google.com/?q=${query}`;
     }
     // Universal Link
     // <a href="https://maps.google.com/?q=Eiffel+Tower">
